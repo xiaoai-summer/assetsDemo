@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">AssetsDemo</string>
+    <string name="text">text</string>
+    <string name="img">img</string>
+    <string name="video">video</string>
 </resources>
