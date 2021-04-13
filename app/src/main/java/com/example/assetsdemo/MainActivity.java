@@ -1,8 +1,13 @@
 package com.example.assetsdemo;
 
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -77,6 +82,25 @@ public class MainActivity extends AppCompatActivity {
             mVideoShowVv.setVideoPath(file.getAbsolutePath());
             mVideoShowVv.setMediaController(mediaController);
             mediaController.setMediaPlayer(mVideoShowVv);
+            mVideoShowVv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                        @Override
+                        public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                                mVideoShowVv.setBackgroundColor(Color.TRANSPARENT);
+                            }
+                            return true;
+                        }
+                    });
+                }
+            });
+            MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+            mediaMetadataRetriever.setDataSource(file.getAbsolutePath());
+            Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(0);
+            mVideoShowVv.setBackground(new BitmapDrawable(Resources.getSystem(), bitmap));
+            mImgShowIv.setImageBitmap(bitmap);
             mVideoShowVv.start();
         }
     }
