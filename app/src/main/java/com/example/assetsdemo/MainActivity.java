@@ -10,6 +10,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextShowTv;
     private ImageView mImgShowIv;
     private VideoView mVideoShowVv;
+    private MyItemView mMyItemView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mTextShowTv = findViewById(R.id.text_show_tv);
         mImgShowIv = findViewById(R.id.img_show_iv);
         mVideoShowVv = findViewById(R.id.video_show_vv);
+        mMyItemView = findViewById(R.id.my_view);
         initListener();
     }
 
@@ -174,5 +177,23 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        Log.i("wxy", "dispatchKeyEvent ---- MainActivity" + event.getAction() + "******" + event.getKeyCode());
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.i("wxy", "onKeyDown ---- MainActivity" + event.getAction() + "******" + event.getKeyCode());
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.i("wxy", "onKeyUp ---- MainActivity" + event.getAction() + "******" + event.getKeyCode());
+        return super.onKeyUp(keyCode, event);
     }
 }
