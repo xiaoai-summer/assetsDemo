@@ -54,4 +54,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
+
+    <com.example.assetsdemo.TextureViewView
+        android:id="@+id/texture_view"
+        android:layout_width="300dp"
+        android:layout_height="500dp"
+        android:visibility="gone"/>
 </LinearLayout>

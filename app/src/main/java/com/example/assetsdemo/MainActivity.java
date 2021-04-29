@@ -1,5 +1,6 @@
 package com.example.assetsdemo;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -8,7 +9,10 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mImgShowIv;
     private VideoView mVideoShowVv;
     private MyItemView mMyItemView;
+    private TextureViewView mTextureViewView;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         mAssetsVideoBtn = findViewById(R.id.assets_video_btn);
         mTextShowTv = findViewById(R.id.text_show_tv);
         mImgShowIv = findViewById(R.id.img_show_iv);
-        mVideoShowVv = findViewById(R.id.video_show_vv);
+//        mVideoShowVv = findViewById(R.id.video_show_vv);
+        mTextureViewView = findViewById(R.id.texture_view);
         mMyItemView = findViewById(R.id.my_view);
         initListener();
     }
@@ -71,9 +78,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getAssetsVideoFile();
-                playAssetsVideo();
+//                playAssetsVideo();
+                playAssetsVideoWithTextureView();
             }
         });
+    }
+
+    private void playAssetsVideoWithTextureView() {
+        File file = new File(getCacheDir() + File.separator + "videos", " anim.mp4");
+        if (file.exists()) {
+            mTextureViewView.setVisibility(View.VISIBLE);
+            mTextureViewView.setDataSoure(Uri.parse(file.getAbsolutePath()));
+            mTextureViewView.openVideo();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                    startActivity(intent);
+                }
+            }, 10000);
+        }
     }
 
     private void playAssetsVideo() {
