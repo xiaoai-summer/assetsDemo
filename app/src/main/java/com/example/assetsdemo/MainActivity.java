@@ -12,7 +12,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.MessageQueue;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         mTextureViewView = findViewById(R.id.texture_view);
         mMyItemView = findViewById(R.id.my_view);
         initListener();
+        reflectIdleHandler();
     }
 
     private void initListener() {
@@ -219,5 +223,28 @@ public class MainActivity extends AppCompatActivity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         Log.i("wxy", "onKeyUp ---- MainActivity" + event.getAction() + "******" + event.getKeyCode());
         return super.onKeyUp(keyCode, event);
+    }
+
+    public void reflectIdleHandler() {
+        HandlerThread sThread = new HandlerThread("favorite-model");
+        sThread.start();
+
+        mHandler = new Handler(sThread.getLooper());
+
+        try {
+            Field field = Looper.class.getDeclaredField("mQueue");
+            field.setAccessible(true);
+            MessageQueue queue = (MessageQueue) field.get(sThread.getLooper());
+            Log.i("wxy", "反射");
+            queue.addIdleHandler(new MessageQueue.IdleHandler() {
+                @Override
+                public boolean queueIdle() {
+                    Log.i("wxy", "反射-----");
+                    return true;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
